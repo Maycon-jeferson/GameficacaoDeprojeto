@@ -19,7 +19,14 @@
         </div>
         <div class="top-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Alternar modo noturno">🌙</button>
-          <button class="icon-button" id="cardStyleToggle" type="button" aria-label="Alternar estilo dos cards">🃏</button>
+          <div class="style-dropdown">
+            <button class="icon-button" id="cardStyleToggle" type="button" aria-label="Selecionar estilo dos cards">🃏</button>
+            <div class="style-dropdown-menu" id="styleDropdownMenu">
+              <button type="button" data-style="rounded">● Arredondado</button>
+              <button type="button" data-style="square">● Quadrado</button>
+              <button type="button" data-style="checklist">● Checklist</button>
+            </div>
+          </div>
           <span class="top-pill" id="topLevelLabel">Nível 1</span>
         </div>
       </header>

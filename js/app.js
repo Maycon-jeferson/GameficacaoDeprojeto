@@ -56,8 +56,26 @@ function setCardStyle(style) {
 }
 
 function toggleCardStyle() {
+  const menu = document.getElementById("styleDropdownMenu");
+  menu.classList.toggle("show");
+}
+
+function selectCardStyle(style) {
+  setCardStyle(style);
+  const menu = document.getElementById("styleDropdownMenu");
+  menu.classList.remove("show");
+  updateStyleDropdownButtons();
+}
+
+function updateStyleDropdownButtons() {
   const currentStyle = document.body.getAttribute("data-card-style");
-  setCardStyle(currentStyle === "square" ? "rounded" : "square");
+  document.querySelectorAll(".style-dropdown-menu button").forEach(btn => {
+    if (btn.getAttribute("data-style") === currentStyle) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
 }
 
 function isMissionDone(id) {
@@ -248,6 +266,18 @@ document.getElementById("exportBtn").addEventListener("click", exportProgress);
 document.getElementById("themeToggle").addEventListener("click", toggleTheme);
 document.getElementById("cardStyleToggle").addEventListener("click", toggleCardStyle);
 
+document.querySelectorAll(".style-dropdown-menu button").forEach(btn => {
+  btn.addEventListener("click", (e) => selectCardStyle(e.target.getAttribute("data-style")));
+});
+
+document.addEventListener("click", (e) => {
+  const dropdown = document.querySelector(".style-dropdown");
+  if (!dropdown.contains(e.target)) {
+    document.getElementById("styleDropdownMenu").classList.remove("show");
+  }
+});
+
 setTheme(loadTheme());
 setCardStyle(loadCardStyle());
+updateStyleDropdownButtons();
 render();
