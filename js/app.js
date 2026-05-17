@@ -86,11 +86,26 @@ function getMissionGlobalIndex(id) {
   return allMissions.findIndex((mission) => mission.id === id);
 }
 
-function isMissionUnlocked(id) {
+function getPreviousRequiredMission(id) {
   const index = getMissionGlobalIndex(id);
-  if (index === 0) return true;
-  const previousMission = allMissions[index - 1];
-  return isMissionDone(previousMission.id);
+  return allMissions
+    .slice(0, index)
+    .reverse()
+    .find((mission) => mission.required !== false);
+}
+
+function isMissionUnlocked(id) {
+  const previousRequired = getPreviousRequiredMission(id);
+  return previousRequired ? isMissionDone(previousRequired.id) : true;
+}
+
+function canUncheckMission(id) {
+  const index = getMissionGlobalIndex(id);
+  const mission = allMissions[index];
+  if (mission.required === false) return true;
+  return !allMissions
+    .slice(index + 1)
+    .some((later) => isMissionDone(later.id) && getPreviousRequiredMission(later.id)?.id === id);
 }
 
 function getTotalXp() {
@@ -114,10 +129,8 @@ function toggleMission(id) {
   }
 
   if (isMissionDone(id)) {
-    const index = getMissionGlobalIndex(id);
-    const hasCompletedAfter = allMissions.slice(index + 1).some((mission) => isMissionDone(mission.id));
-    if (hasCompletedAfter) {
-      showToast("Para desmarcar esta missão, desmarque primeiro as missões seguintes.");
+    if (!canUncheckMission(id)) {
+      showToast("Para desmarcar esta missão, desmarque primeiro as missões obrigatórias seguintes.");
       return;
     }
     progress.completed = progress.completed.filter((missionId) => missionId !== id);
@@ -149,6 +162,7 @@ function renderStats() {
   const level = getLevel(totalXp);
   const nextMission = getNextMission();
   const nextLabel = nextMission ? nextMission.title : "Campanha completa";
+  const nextLevel = levels.find((level) => totalXp < level.min);
 
   document.getElementById("progressFill").style.width = `${percent}%`;
   document.getElementById("progressPercent").textContent = `${percent}% concluído`;
@@ -156,6 +170,9 @@ function renderStats() {
   document.getElementById("levelLabel").textContent = level;
   document.getElementById("topLevelLabel").textContent = level.split("—")[0].trim();
   document.getElementById("nextMissionLabel").textContent = nextLabel;
+  document.getElementById("nextLevelHint").textContent = nextLevel
+    ? `Faltam ${nextLevel.min - totalXp} XP para ${nextLevel.label}`
+    : "Nível máximo alcançado";
 }
 
 function renderChapters() {
@@ -193,14 +210,29 @@ function renderChapters() {
       const unlocked = isMissionUnlocked(id);
 
       const missionElement = document.createElement("div");
-      missionElement.className = ["mission", missionDone ? "done" : "", !unlocked ? "locked" : ""].join(" ").trim();
+      missionElement.className = [
+        "mission",
+        missionDone ? "done" : "",
+        !unlocked ? "locked" : "",
+        mission.required === false ? "optional" : ""
+      ]
+        .join(" ")
+        .trim();
+      const stateLabel = missionDone
+        ? "✅ Concluída"
+        : unlocked
+        ? mission.required === false
+          ? "🟡 Opcional liberada"
+          : "⬜ Liberada"
+        : "🔒 Bloqueada";
       missionElement.innerHTML = `
         <div class="mission-top">
-          <span class="mission-state">${missionDone ? "✅ Concluída" : unlocked ? "⬜ Liberada" : "🔒 Bloqueada"}</span>
+          <span class="mission-state">${stateLabel}</span>
           <span class="xp">+${mission.xp} XP</span>
         </div>
         <div>
           <p class="mission-title">${mission.title}</p>
+          <p class="mission-tag ${mission.required === false ? "optional" : "required"}">${mission.required === false ? "Opcional" : "Obrigatória"}</p>
           <p class="mission-meta"><strong>Critério de pronto:</strong> ${mission.doneCriteria}</p>
         </div>
         <button class="check" aria-label="Marcar missão" ${!unlocked ? "disabled" : ""}>✓</button>
