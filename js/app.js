@@ -2,19 +2,32 @@ const STORAGE_KEY = "erp-game-progress-v2";
 const THEME_KEY = "erp-game-theme";
 const CARD_STYLE_KEY = "erp-game-card-style";
 
-const chapters = GAME_CHAPTERS;
-const levels = GAME_LEVELS;
+let chapters = [];
+let levels = [];
+let allMissions = [];
+let progress = { completed: [] };
 
-const allMissions = chapters.flatMap((chapter, chapterIndex) =>
-  chapter.missions.map((mission, missionIndex) => ({
-    ...mission,
-    id: `${chapterIndex}-${missionIndex}`,
-    chapterIndex,
-    missionIndex
-  }))
-);
+async function initGameData() {
+  const response = await fetch("js/missions-data.json");
+  if (!response.ok) {
+    throw new Error("Falha ao carregar dados do jogo.");
+  }
 
-let progress = loadProgress();
+  const data = await response.json();
+  chapters = data.GAME_CHAPTERS;
+  levels = data.GAME_LEVELS;
+
+  allMissions = chapters.flatMap((chapter, chapterIndex) =>
+    chapter.missions.map((mission, missionIndex) => ({
+      ...mission,
+      id: `${chapterIndex}-${missionIndex}`,
+      chapterIndex,
+      missionIndex
+    }))
+  );
+
+  progress = loadProgress();
+}
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -309,7 +322,14 @@ document.addEventListener("click", (e) => {
   }
 });
 
-setTheme(loadTheme());
-setCardStyle(loadCardStyle());
-updateStyleDropdownButtons();
-render();
+initGameData()
+  .then(() => {
+    setTheme(loadTheme());
+    setCardStyle(loadCardStyle());
+    updateStyleDropdownButtons();
+    render();
+  })
+  .catch((error) => {
+    console.error(error);
+    showToast("Erro ao carregar os dados do jogo.");
+  });
