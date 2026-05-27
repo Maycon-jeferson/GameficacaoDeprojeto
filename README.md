@@ -48,6 +48,13 @@ Para contribuir ou modificar:
 2. Edite os arquivos conforme necessário.
 3. Teste abrindo `index.html` no navegador.
 
+## Credenciais temporárias (para testes locais)
+
+- **Usuário:** demo
+- **Senha:** demo123
+
+> Observação: estas credenciais são apenas para testes locais e prototipagem. Remova ou atualize antes de publicar.
+
 ## Licença
 
 Este projeto é de código aberto. Sinta-se à vontade para usar e modificar.
