@@ -27,7 +27,9 @@ O aplicativo funciona completamente offline, sem necessidade de servidor.
 
 ## Estrutura do Projeto
 
-- `index.html`: Página principal da aplicação.
+- `index.html`: Página inicial / dashboard.
+- `project.html`: Página do projeto em execução.
+- `create-project.html`: Página para adicionar um novo projeto.
 - `css/styles.css`: Arquivo de estilos CSS.
 - `js/app.js`: Lógica principal da aplicação em JavaScript.
 - `js/missions-data.js`: Dados das missões e capítulos.

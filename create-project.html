@@ -215,6 +215,30 @@
       margin-top:5px;
     }
 
+    .page-nav{
+      display:flex;
+      justify-content:flex-start;
+      margin-bottom:20px;
+      gap:12px;
+    }
+
+    .page-nav a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:12px 18px;
+      border-radius:14px;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.12);
+      transition:.2s;
+    }
+
+    .page-nav a:hover{
+      background:rgba(255,255,255,.15);
+    }
+
     pre{
       background:#020617;
       color:#38bdf8;
@@ -239,6 +263,10 @@
 </head>
 
 <body>
+
+  <div class="page-nav">
+    <a href="index.html">← Voltar à página inicial</a>
+  </div>
 
   <div class="container">
 

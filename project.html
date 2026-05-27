@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Progress — ERP Doméstico</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .page-nav{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      padding:14px 22px;
+      background:rgba(255,255,255,.72);
+      border-bottom:1px solid rgba(148,163,184,.25);
+      backdrop-filter:blur(12px);
+    }
+    .page-nav a{
+      font-weight:700;
+      color:var(--text);
+      text-decoration:none;
+      padding:10px 16px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.82);
+      transition:.2s;
+    }
+    .page-nav a:hover{
+      background:rgba(255,255,255,.96);
+      transform:translateY(-1px);
+    }
+    html[data-theme="dark"] .page-nav{background:rgba(15,23,42,.72);}
+    html[data-theme="dark"] .page-nav a{background:rgba(15,23,42,.86);color:#e5e7eb;}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="native-shell">
+      <header class="app-topbar">
+        <div class="brand">
+          <div class="brand-icon">ERP</div>
+          <div>
+            <p class="brand-title">Game Progress</p>
+            <p class="brand-subtitle">ERP Doméstico Local-First</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="themeToggle" type="button" aria-label="Alternar modo noturno">🌙</button>
+          <div class="style-dropdown">
+            <button class="icon-button" id="cardStyleToggle" type="button" aria-label="Selecionar estilo dos cards">🃏</button>
+            <div class="style-dropdown-menu" id="styleDropdownMenu">
+              <button type="button" data-style="rounded">● Arredondado</button>
+              <button type="button" data-style="square">● Quadrado</button>
+              <button type="button" data-style="checklist">● Checklist</button>
+            </div>
+          </div>
+          <span class="top-pill" id="topLevelLabel">Nível 1</span>
+        </div>
+      </header>
+      <div class="page-nav">
+        <a href="index.html">← Voltar à página inicial</a>
+      </div>
+      <div class="content">
+        <section class="main-mission">
+          <div>
+            <div class="eyebrow">🎯 Missão principal</div>
+            <h1>Construir um ERP doméstico local-first</h1>
+            <p class="subtitle">Desenvolver um sistema financeiro doméstico com banco local, dashboard, módulos principais, backup remoto e sincronização progressiva.</p>
+          </div>
+          <aside class="mission-focus-card">
+            <p class="focus-label">Próxima missão</p>
+            <p class="focus-value" id="nextMissionLabel">-</p>
+          </aside>
+        </section>
+        <section class="progress-card" aria-label="Progresso geral">
+          <div class="progress-top">
+            <p class="progress-title">Progresso geral</p>
+            <p class="progress-percent" id="progressPercent">0%</p>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-mini">
+            <span class="summary-pill" id="xpLabel">0 XP</span>
+            <span class="summary-pill" id="levelLabel">Nível 1</span>
+            <span class="summary-pill" id="nextLevelHint">Faltam 250 XP para o próximo nível</span>
+          </div>
+        </section>
+        <h2 class="section-title">Decks de desenvolvimento</h2>
+        <div class="chapters" id="chapters"></div>
+        <section class="footer-actions">
+          <div class="footer-actions-text">
+            <strong>Gerenciar progresso</strong>
+            <span>Exporte seu avanço em JSON ou reinicie a campanha quando quiser.</span>
+          </div>
+          <div class="actions">
+            <button class="secondary" id="exportBtn" type="button">Exportar progresso</button>
+            <button class="secondary danger" id="resetBtn" type="button">Resetar</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
